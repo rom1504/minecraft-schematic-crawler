@@ -1,3 +1,1 @@
-const template = require('prismarine-template')
-
-template.helloWorld()
+require('minecraft-schematic-crawler')

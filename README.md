@@ -10,7 +10,7 @@ Automatic minecraft schematic crawler for bots and ML
 
 ## Usage
 
-`node example.js`
+`node indexCrawler.js`
 
 ## API
 

@@ -10,8 +10,7 @@ Automatic minecraft schematic crawler for bots and ML
 
 ## Usage
 
-```js
-```
+`node example.js`
 
 ## API
 

@@ -28,5 +28,9 @@
     "jest": "^26.1.0",
     "require-self": "^0.2.3",
     "standard": "^16.0.1"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "node-fetch": "^2.6.1"
   }
 }

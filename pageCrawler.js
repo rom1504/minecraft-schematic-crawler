@@ -9,8 +9,18 @@ const schematics = JSON.parse(fs.readFileSync('schematics.json'))
 // const secondSchematic = schematics[Object.keys(schematics)[10]]
 // const result = {}
 
-async function analyzePage (schematic) {
-  const r = await fetch(schematic.url)
+async function analyzePage (schematic, timeout = 10000) {
+  let r
+  try {
+    r = r = await Promise.race([fetch(schematic.url), new Promise(resolve => setTimeout(() => resolve(null), timeout))])
+
+    if (r === null) {
+      return null
+    }
+  } catch (err) {
+    console.log(err)
+    return null
+  }
   const t = await r.text()
   const $ = cheerio.load(t)
   const singleImage = $('.single_image > img').attr('src')
@@ -23,7 +33,8 @@ async function analyzePage (schematic) {
   const downloads = parseInt($('.resource-statistics > li:contains("downloads")').find('span').first().text())
   const comments = parseInt($('.resource-statistics > li:contains("comments")').find('span').first().text())
   const favorites = parseInt($('.resource-statistics > li:contains("favorites")').find('span').first().text())
-  const downloadLink = 'https://www.planetminecraft.com' + $('.content-actions > li > .js_link').attr('data-href')
+  const rawLink = $('.content-actions > li > .js_link').attr('data-href')
+  const downloadLink = rawLink === undefined ? undefined : 'https://www.planetminecraft.com' + rawLink
   const raw3rdParty = $('.content-actions > li > .third-party-download').attr('title')
   const thirdPartyDownloadLink = raw3rdParty === undefined ? raw3rdParty : raw3rdParty.replace(/Download file from mirror: /g, '')
   const videoLink = $('.rsNoDrag').attr('href')
@@ -53,13 +64,14 @@ async function analyzeBottleneck (schematics) {
     minTime: 10
   })
   let i = 0
-  return Promise.all(schematics.map(schematic => limiter.schedule(() => analyzePage(schematic).then(() => {
+  return Promise.all(schematics.map(schematic => limiter.schedule(() => analyzePage(schematic).then(p => {
     i++
     if (i % 100 === 0) {
       const b = new Date()
       console.log(i, 'done in', (b - a) / 1000)
       a = b
     }
+    return p
   }))))
 }
 

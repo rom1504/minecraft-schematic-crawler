@@ -9,10 +9,12 @@ const schematics = JSON.parse(fs.readFileSync('schematics.json'))
 // const secondSchematic = schematics[Object.keys(schematics)[10]]
 // const result = {}
 
-async function analyzePage (schematic, timeout = 10000) {
+async function analyzePage (schematic, timeout = 60000) {
   let r
   try {
-    r = r = await Promise.race([fetch(schematic.url), new Promise(resolve => setTimeout(() => resolve(null), timeout))])
+    let t
+    r = r = await Promise.race([fetch(schematic.url), new Promise(resolve => { t = setTimeout(() => resolve(null), timeout) })])
+    clearTimeout(t)
 
     if (r === null) {
       return null

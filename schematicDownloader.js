@@ -33,9 +33,15 @@ async function writeTfRecords (filename, examples) {
   await writer.close()
 }
 
+async function downloadSavePerBatch (schematics, batchSize = 1000) {
+  for (let i = 0; i < Math.ceil(schematics.length / batchSize) * batchSize; i += batchSize) {
+    const schematicsBatch = schematics.slice(i, i + batchSize)
+    const data = await downloadBottleneck(schematicsBatch, download)
+    await writeTfRecords('schematics/schematics_' + i + '.tfrecords', data)
+    console.log('batch', i + '-' + (i + batchSize))
+  }
+}
+
 // download(firstSchematic).then(b => console.log(b))
 
-const a = new Date()
-downloadBottleneck(fullSchematics.slice(0, 1000), download)
-  .then(r => writeTfRecords('schematics.tfrecord', r))
-  .then(() => console.log((new Date() - a) / 1000))
+downloadSavePerBatch(fullSchematics.slice(0, 3000))

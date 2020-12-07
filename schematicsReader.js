@@ -6,7 +6,7 @@ async function read () {
   const enc = new TextDecoder()
   while (example = await reader.readExample()) { // eslint-disable-line
     console.log(enc.decode(example.features.feature.url.bytesList.value[0]))
-    console.log(Buffer.from(example.features.feature.schematicData.bytesList.value[0]))
+    console.log(Buffer.from(example.features.feature.schematicData.bytesList.value[0]).length)
     break
   }
 }

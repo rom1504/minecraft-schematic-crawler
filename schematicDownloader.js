@@ -44,4 +44,4 @@ async function downloadSavePerBatch (schematics, batchSize = 1000) {
 
 // download(firstSchematic).then(b => console.log(b))
 
-downloadSavePerBatch(fullSchematics.slice(0, 3000))
+downloadSavePerBatch(fullSchematics)

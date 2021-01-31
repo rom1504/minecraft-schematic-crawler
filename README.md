@@ -15,6 +15,7 @@ Automatic minecraft schematic crawler for bots and ML
 * Get the final urls for schematics with `node getFinalDownloadLinks.js`. Takes 5min.
 * Download the schematics with `node schematicDownloader.js`. Takes 5min.
 * Run `node schematicsReader.js` to see the result
+* Run `node imageDownloader.js` to get schematic images.
 
 ## API
 

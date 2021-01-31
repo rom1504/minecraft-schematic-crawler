@@ -35,8 +35,7 @@ async function download (schematic) {
             })
             return {url: schematic.url, imageUrl, imageData: await sharp(imageData)
             .resize(224, 224, {
-                fit: 'contain',
-                background: { r: 255, g: 255, b: 255, alpha: 0 }
+                fit: 'cover',
             }).toFormat('jpeg').toBuffer()}          
         } catch (err) {
             console.log(err)
@@ -64,7 +63,7 @@ async function writeTfRecords (filename, examples) {
 
 async function downloadSavePerBatch (schematics, batchSize = 100) {
   console.log("total: "+ Math.ceil(schematics.length / batchSize) * batchSize)
-  for (let i = 36100; i < Math.ceil(schematics.length / batchSize) * batchSize; i += batchSize) {
+  for (let i = 0; i < Math.ceil(schematics.length / batchSize) * batchSize; i += batchSize) {
     try {
         const schematicsBatch = schematics.slice(i, i + batchSize)
         const data = await downloadBottleneck(schematicsBatch, download, { maxConcurrent: 100, minTime: 20 })
